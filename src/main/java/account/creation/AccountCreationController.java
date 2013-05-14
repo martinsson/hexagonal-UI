@@ -2,18 +2,17 @@ package account.creation;
 
 import java.io.IOException;
 
-import org.springframework.http.HttpRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-
 import account.ourdependencies.AccountBean;
 import account.ourdependencies.ErrorsList;
 import account.ourdependencies.Log;
 import account.ourdependencies.LogTool;
 import account.ourdependencies.TechnicalException;
+import account.thirdpartyframework.ActionMapping;
+import account.thirdpartyframework.Controller;
+import account.thirdpartyframework.HttpRequest;
 import account.thirdpartyframework.HttpResponse;
+import account.thirdpartyframework.ModelAttribute;
+import account.thirdpartyframework.RequestMapping;
 
 /**
  * 

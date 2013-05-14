@@ -3,11 +3,6 @@
  */
 package account.creation;
 
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
-
 import account.ourdependencies.AccountBean;
 import account.ourdependencies.DataList;
 import account.ourdependencies.ElementsInfoForMailCreation;
@@ -25,6 +20,7 @@ import account.ourdependencies.TemplateNetMailCreationReussieBo;
 import account.ourdependencies.TemplateNetMailCreationReussieClient;
 import account.ourdependencies.UserInfo;
 import account.ourdependencies.UserService;
+import account.thirdpartyframework.Component;
 import account.thirdpartyframework.PortalException;
 import account.thirdpartyframework.SystemException;
 import account.thirdpartyframework.UserAPICoreException;

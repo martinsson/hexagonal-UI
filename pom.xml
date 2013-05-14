@@ -4,11 +4,6 @@
   <artifactId>hexagonal-architecture</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <dependencies>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc-portlet</artifactId>
-      <version>3.1.0.RELEASE</version>
-    </dependency>
   </dependencies>
 
 </project>
