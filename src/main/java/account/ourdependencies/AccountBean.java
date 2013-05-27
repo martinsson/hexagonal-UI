@@ -2,29 +2,37 @@ package account.ourdependencies;
 
 public class AccountBean {
 
-    public String getSiret() {
-        // TODO Auto-generated method stub
-        return null;
+    private String siret;
+    private String password;
+    private String email;
+
+    public AccountBean() {
+    }
+    
+    public AccountBean(String password, String email, String siret) {
+        this.password = password;
+        this.email = email;
+        this.siret = siret;
     }
 
-    public Object getPassword() {
-        // TODO Auto-generated method stub
-        return null;
+    public String getSiret() {
+        return siret;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getCondGeneMobile() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public String getCondGeneInternet() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public String getEmail() {
-        // TODO Auto-generated method stub
-        return null;
+        return email;
     }
 
 }

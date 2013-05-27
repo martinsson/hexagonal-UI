@@ -28,7 +28,7 @@ public class AccountCreationController {
     public static final int MAX_SIU_TRIES = 4;
     public static final int WAIT_TIME_BEFORE_SIU_RETRY = 500;
 
-    private static final String DEFAULT_FINAL_URL_NO_CREATED = null;
+    public static final String DEFAULT_FINAL_URL_NO_CREATED = "someUrl";
 
     private AccountService accountService;
 
@@ -39,18 +39,18 @@ public class AccountCreationController {
 
 
     @ActionMapping(params = "action=doFormAction")
-    public void doAction(@ModelAttribute AccountBean eceAccountBean, HttpRequest request,
+    public void doAction(@ModelAttribute AccountBean accountBean, HttpRequest request,
              HttpResponse response) throws IOException {
 
         boolean compteCree = false;
-        ErrorsList listErrorFields = checkFieldsForm(eceAccountBean);
+        ErrorsList listErrorFields = checkFieldsForm(accountBean);
 
         if (listErrorFields.hasError()) {
             response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
             response.setRenderParameter("action", "view");
         } else {
             try {
-                compteCree = accountService.createAccount(eceAccountBean);
+                compteCree = accountService.createAccount(accountBean);
             } catch (TechnicalException e) {
                 LOG.warning("creation du compte impossible", e.getMessage());
             }
@@ -64,7 +64,12 @@ public class AccountCreationController {
 
 
     private account.ourdependencies.ErrorsList checkFieldsForm(AccountBean eceAccountBean) {
-        return new ErrorsList();
+        
+        ErrorsList errorsList = new ErrorsList();
+        if (eceAccountBean.getEmail() == null) {
+            errorsList.add("email missing");
+        } 
+        return errorsList;
     }
 
 
