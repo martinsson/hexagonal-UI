@@ -1,5 +1,6 @@
 package account.creation;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
@@ -15,6 +16,8 @@ public class AccountCreationControllerTest {
     @Test public void 
     fails_with_errors() throws Exception {
          AccountCreationController controler = new AccountCreationController(mock(AccountService.class));
-         controler.doAction(new AccountBean(), new HttpRequest(), new HttpResponse());
+         HttpResponse response = new HttpResponse();
+         controler.doAction(new AccountBean(), new HttpRequest(), response);
+         assertThat(response.getAttribute("error_fields_create_compte")).isNotEmpty();
     }
 }

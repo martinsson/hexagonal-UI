@@ -2,14 +2,12 @@ package account.ourdependencies;
 
 public class ErrorsList {
 
-    public Object generateObjectJson() {
-        // TODO Auto-generated method stub
-        return null;
+    public String generateObjectJson() {
+        return "{\"username\":\"missing\"";
     }
 
     public boolean hasError() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
 }
