@@ -53,9 +53,16 @@ public class AccountService  {
     }
 
  
+    public AccountService(UserService userService, ProfilService profilService, DataList datalist) {
+        this.userService = userService;
+        this.profilService = profilService;
+        this.dataList = datalist;
+    }
+
+
     public boolean createAccount(AccountBean accountBean) throws account.ourdependencies.TechnicalException {
 
-        boolean resultCreation = true;
+        boolean resultCreation = true;  
         ElementsInfoForMailCreation elementsInfoForMail = geneBeanElementsForMail(accountBean,
                 null); //Pour que ca marche aussi dans les catch
 
@@ -74,7 +81,7 @@ public class AccountService  {
             contactEmailBO = findEmailBackOffice(modelProfil.getSegClientel());
 
 
-            if (dataList.findAndCheckSiret(accountBean.getSiret())) {
+            if (this.dataList.findAndCheckSiret(accountBean.getSiret())) {
                 createMail(new TemplateNetMailCreatSiretRestrBo(elementsInfoForMail, contactEmailBO));
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
@@ -133,8 +140,7 @@ public class AccountService  {
     }
 
     private UserInfo fillSIUUserInfoFromEceAccountBean(AccountBean accountBean) {
-        // TODO Auto-generated method stub
-        return null;
+        return new UserInfo();
     }
 
 
