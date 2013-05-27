@@ -33,6 +33,11 @@ public class AccountCreationController {
     private AccountService accountService;
 
 
+    public AccountCreationController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+
     @ActionMapping(params = "action=doFormAction")
     public void doAction(@ModelAttribute AccountBean eceAccountBean, HttpRequest request,
              HttpResponse response) throws IOException {
@@ -59,8 +64,7 @@ public class AccountCreationController {
 
 
     private account.ourdependencies.ErrorsList checkFieldsForm(AccountBean eceAccountBean) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ErrorsList();
     }
 
 
