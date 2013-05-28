@@ -48,8 +48,7 @@ public class AccountService  {
      * @param service
      */
     public AccountService(UserService service) {
-        this.userService = service;
-        this.profilService = new ProfilService();
+        this(service, new ProfilService(), new DataList());
     }
 
  

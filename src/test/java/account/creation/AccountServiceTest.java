@@ -14,6 +14,8 @@ import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
 import account.ourdependencies.TechnicalException;
 import account.ourdependencies.UserService;
+import account.thirdpartyframework.PortalException;
+import account.thirdpartyframework.SystemException;
 import account.thirdpartyframework.UserAPICoreException;
 import account.thirdpartyframework.UserAPIUserException;
 import account.thirdpartyframework.WrefTechnicalException;
@@ -83,6 +85,20 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
+        createAccountExpectingTechnicalException();
+    }
+    
+    @Test public void 
+    wraps_exceptions_in_TechnicalException4() throws Exception {
+        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
+        when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
+        createAccountExpectingTechnicalException();
+    }
+
+    @Test public void 
+    wraps_exceptions_in_TechnicalException5() throws Exception {
+        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
+        when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
         createAccountExpectingTechnicalException();
     }
     
