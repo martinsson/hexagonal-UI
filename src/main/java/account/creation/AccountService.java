@@ -86,12 +86,14 @@ public class AccountService  {
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
                 resultCreation = false;
+                response.error();
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
                 createMail(new TemplateNetMailCreatEmailSiuBo(elementsInfoForMail, contactEmailBO));
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
                 resultCreation = false;
+                response.error();
             } else {
                 userService.createAccount(userInfo, accountBean.getPassword(),
                         accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
@@ -100,27 +102,28 @@ public class AccountService  {
                 createMail(new TemplateNetMailCreationReussieClient(elementsInfoForMail,
                         userInfo.getMail()));
                 resultCreation = true;
+                response.success();
             }
         } catch (WrefTechnicalException e) {
             LOG.warning("WrefTechnicalException: " + e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
+            response.error();
         } catch (UserAPIUserException e) {
             LOG.warning(e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
+            response.error();
         } catch (UserAPICoreException e) {
             LOG.warning(e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
+            response.error();
         } catch (SystemException e) {
             LOG.warning("System exception", e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
+            response.error();
         } catch (PortalException p) {
             LOG.warning("PortalException : ", p.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(p);
+            response.error();
         }
         return resultCreation;
 
