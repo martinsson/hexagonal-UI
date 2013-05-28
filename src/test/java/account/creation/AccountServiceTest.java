@@ -61,53 +61,42 @@ public class AccountServiceTest {
         assertFalse(result);
     }
     
-    @Test public void 
-    wraps_exceptions_in_TechnicalException() throws Exception {
-        String siret = "1234567890123";
-        when(profilService.findProfilWithSiret(siret)).thenThrow(new WrefTechnicalException());
-        
-        try {
-            service.createAccount(new AccountBean("", "", siret));
-        } catch (TechnicalException e) {
-            // success
-        }
+    @Test(expected=TechnicalException.class) public void 
+    wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
+        when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
+        service.createAccount(new AccountBean("", "", ""));
     }
-    @Test public void 
+    
+    @Test(expected=TechnicalException.class) public void 
     wraps_exceptions_in_TechnicalException2() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
         
-        createAccountExpectingTechnicalException();
+        service.createAccount(new AccountBean("", "", ""));
     }
 
-    @Test public void 
+    @Test(expected=TechnicalException.class) public void 
     wraps_exceptions_in_TechnicalException3() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
-        createAccountExpectingTechnicalException();
+        service.createAccount(new AccountBean("", "", ""));
     }
     
-    @Test public void 
+    @Test(expected=TechnicalException.class) public void 
     wraps_exceptions_in_TechnicalException4() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
-        createAccountExpectingTechnicalException();
+        
+        service.createAccount(new AccountBean("", "", ""));
     }
 
-    @Test public void 
+    @Test(expected=TechnicalException.class) public void 
     wraps_exceptions_in_TechnicalException5() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
-        createAccountExpectingTechnicalException();
-    }
-    
-    private void createAccountExpectingTechnicalException() {
-        try {
-            service.createAccount(new AccountBean("", "", ""));
-        } catch (TechnicalException e) {
-            // success
-        }
+        
+        service.createAccount(new AccountBean("", "", ""));
     }
     
 }
