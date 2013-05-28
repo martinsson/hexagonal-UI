@@ -30,11 +30,11 @@ public class AccountCreationController {
 
     public static final String DEFAULT_FINAL_URL_NO_CREATED = "someUrl";
 
-    private AccountService accountService;
+    private ValidatingService validatingService;
 
 
-    public AccountCreationController(AccountService accountService) {
-        this.accountService = accountService;
+    public AccountCreationController(ValidatingService service) {
+        this.validatingService = service;
     }
 
 
@@ -48,7 +48,7 @@ public class AccountCreationController {
             response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
             response.setRenderParameter("action", "view");
         } else {
-            accountService.createAccount(accountBean, new HTTPCreationResponse());
+            validatingService.createAccount(accountBean, new HTTPCreationResponse());
         }
     }
 

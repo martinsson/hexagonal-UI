@@ -84,13 +84,13 @@ public class AccountService  {
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
-                response.error();
+                response.pending();
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
                 createMail(new TemplateNetMailCreatEmailSiuBo(elementsInfoForMail, contactEmailBO));
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
-                response.error();
+                response.pending();
             } else {
                 userService.createAccount(userInfo, accountBean.getPassword(),
                         accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
@@ -103,23 +103,23 @@ public class AccountService  {
         } catch (WrefTechnicalException e) {
             LOG.warning("WrefTechnicalException: " + e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            response.error();
+            response.pending();
         } catch (UserAPIUserException e) {
             LOG.warning(e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            response.error();
+            response.pending();
         } catch (UserAPICoreException e) {
             LOG.warning(e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            response.error();
+            response.pending();
         } catch (SystemException e) {
             LOG.warning("System exception", e.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            response.error();
+            response.pending();
         } catch (PortalException p) {
             LOG.warning("PortalException : ", p.getMessage());
             sendMailException(elementsInfoForMail, contactEmailBO);
-            response.error();
+            response.pending();
         }
 
     }

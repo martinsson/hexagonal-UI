@@ -1,6 +1,7 @@
 package account.creation;
 
 import static account.creation.AccountCreationController.DEFAULT_FINAL_URL_NO_CREATED;
+import account.ourdependencies.ErrorsList;
 import account.thirdpartyframework.HttpResponse;
 
 public class HTTPCreationResponse implements CreationResponse {
@@ -14,7 +15,7 @@ public class HTTPCreationResponse implements CreationResponse {
     /* (non-Javadoc)
      * @see account.creation.CreationResponse#error()
      */
-    public void error() {
+    public void pending() {
         response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
         
     }
@@ -23,6 +24,13 @@ public class HTTPCreationResponse implements CreationResponse {
      */
     public void success() {
         response.setRenderParameter("action",  "redirect");
+    }
+    
+    @Override
+    public void error(String errors) {
+        response.setAttribute("error_fields_create_compte", errors);
+        response.setRenderParameter("action", "view");
+        
     }
 
 }

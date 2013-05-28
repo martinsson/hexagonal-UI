@@ -48,7 +48,7 @@ public class AccountServiceTest {
 
         service.createAccount(new AccountBean("", "", restrictedSiret), response);
         
-        verify(response).error();
+        verify(response).pending();
     }
     
     @Test public void 
@@ -60,14 +60,14 @@ public class AccountServiceTest {
         
         service.createAccount(new AccountBean("", email, ""), response);
         
-        verify(response).error();
+        verify(response).pending();
     }
     
     @Test public void 
     wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
         service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+        verify(response).pending();
     }
     
     @Test public void 
@@ -76,7 +76,7 @@ public class AccountServiceTest {
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
         
         service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+        verify(response).pending();
     }
 
     @Test public void 
@@ -85,7 +85,7 @@ public class AccountServiceTest {
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
         service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+        verify(response).pending();
     }
     
     @Test public void 
@@ -94,7 +94,7 @@ public class AccountServiceTest {
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
         
         service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+        verify(response).pending();
     }
 
     @Test public void 
@@ -103,7 +103,7 @@ public class AccountServiceTest {
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
         
         service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+        verify(response).pending();
     }
     
 }
