@@ -50,7 +50,7 @@ public class AccountCreationController {
             response.setRenderParameter("action", "view");
         } else {
             try {
-                compteCree = accountService.createAccount(accountBean);
+                compteCree = accountService.createAccount(accountBean, new CreationResponse());
             } catch (TechnicalException e) {
                 LOG.warning("creation du compte impossible", e.getMessage());
             }

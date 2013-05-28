@@ -32,7 +32,7 @@ public class AccountServiceTest {
         String siret = "1234567890123";
         when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
         
-        boolean result = service.createAccount(new AccountBean("", "", siret));
+        boolean result = service.createAccount(new AccountBean("", "", siret), null);
         
         assertTrue(result);
     }
@@ -44,7 +44,7 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(restrictedSiret)).thenReturn(modelProfil);
         when(datalist.findAndCheckSiret(restrictedSiret)).thenReturn(true);
 
-        boolean result = service.createAccount(new AccountBean("", "", restrictedSiret));
+        boolean result = service.createAccount(new AccountBean("", "", restrictedSiret), null);
         
         assertFalse(result);
     }
@@ -56,7 +56,7 @@ public class AccountServiceTest {
         String email = "bill@gates.org";
         when(userService.isEmailAlreadyUsed(email)).thenReturn(true);
         
-        boolean result = service.createAccount(new AccountBean("", email, ""));
+        boolean result = service.createAccount(new AccountBean("", email, ""), null);
         
         assertFalse(result);
     }
@@ -64,7 +64,7 @@ public class AccountServiceTest {
     @Test(expected=TechnicalException.class) public void 
     wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), null);
     }
     
     @Test(expected=TechnicalException.class) public void 
@@ -72,7 +72,7 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), null);
     }
 
     @Test(expected=TechnicalException.class) public void 
@@ -80,7 +80,7 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), null);
     }
     
     @Test(expected=TechnicalException.class) public void 
@@ -88,7 +88,7 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), null);
     }
 
     @Test(expected=TechnicalException.class) public void 
@@ -96,7 +96,7 @@ public class AccountServiceTest {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), null);
     }
     
 }
