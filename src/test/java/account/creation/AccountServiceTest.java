@@ -1,7 +1,9 @@
 package account.creation;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +40,18 @@ public class AccountServiceTest {
         when(datalist.findAndCheckSiret(restrictedSiret)).thenReturn(true);
 
         boolean result = service.createAccount(new AccountBean("", "", restrictedSiret));
+        
+        assertFalse(result);
+    }
+    
+    @Test public void 
+    returns_false_if_email_is_already_used() throws Exception {
+        ModelProfil modelProfil = new ModelProfil();
+        when(profilService.findProfilWithSiret(anyString())).thenReturn(modelProfil);
+        String email = "bill@gates.org";
+        when(userService.isEmailAlreadyUsed(email)).thenReturn(true);
+        
+        boolean result = service.createAccount(new AccountBean("", email, ""));
         
         assertFalse(result);
     }
