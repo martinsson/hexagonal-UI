@@ -81,7 +81,7 @@ public class AccountService  {
             contactEmailBO = findEmailBackOffice(modelProfil.getSegClientel());
 
 
-            if (this.dataList.findAndCheckSiret(accountBean.getSiret())) {
+            if (dataList.findAndCheckSiret(accountBean.getSiret())) {
                 createMail(new TemplateNetMailCreatSiretRestrBo(elementsInfoForMail, contactEmailBO));
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
