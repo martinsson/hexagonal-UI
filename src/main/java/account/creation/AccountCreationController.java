@@ -42,23 +42,13 @@ public class AccountCreationController {
     public void doAction(@ModelAttribute AccountBean accountBean, HttpRequest request,
              HttpResponse response) throws IOException {
 
-        boolean compteCree = false;
         ErrorsList listErrorFields = checkFieldsForm(accountBean);
 
         if (listErrorFields.hasError()) {
             response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
             response.setRenderParameter("action", "view");
         } else {
-            try {
-                compteCree = accountService.createAccount(accountBean, new CreationResponse());
-            } catch (TechnicalException e) {
-                LOG.warning("creation du compte impossible", e.getMessage());
-            }
-            if (compteCree) {
-                response.setRenderParameter("action", "redirect");
-            } else {
-                response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
-            }
+            accountService.createAccount(accountBean, new CreationResponse());
         }
     }
 

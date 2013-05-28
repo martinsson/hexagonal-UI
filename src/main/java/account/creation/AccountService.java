@@ -59,7 +59,7 @@ public class AccountService  {
     }
 
 
-    public boolean createAccount(AccountBean accountBean, CreationResponse response) throws account.ourdependencies.TechnicalException {
+    public boolean createAccount(AccountBean accountBean, CreationResponse response) {
 
         boolean resultCreation = true;  
         ElementsInfoForMailCreation elementsInfoForMail = geneBeanElementsForMail(accountBean,
