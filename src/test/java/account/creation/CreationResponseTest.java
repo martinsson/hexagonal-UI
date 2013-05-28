@@ -1,7 +1,6 @@
 package account.creation;
 
 import static account.creation.AccountCreationController.DEFAULT_FINAL_URL_NO_CREATED;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

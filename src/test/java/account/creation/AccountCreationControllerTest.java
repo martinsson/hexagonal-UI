@@ -19,12 +19,9 @@ public class AccountCreationControllerTest {
     AccountBean accountBean = new AccountBean();
 
     
-
     @Test public void 
     it_asks_for_account_creation_and_provides_an_answer_object() throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
-        HttpResponse response = mock(HttpResponse.class);
-        
         controler.doAction(accountBean, request, response);
         
         verify(service).createAccount(eq(accountBean), any(HTTPCreationResponse.class));
