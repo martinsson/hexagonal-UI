@@ -20,22 +20,22 @@ public class AccountCreationControllerTest {
     HttpRequest request = new HttpRequest();
     AccountBean accountBean = new AccountBean();
 
-    @Test
-    public void fails_with_errors() throws Exception {
+    @Test public void 
+    fails_with_errors() throws Exception {
         controler.doAction(accountBean, request, response);
         assertThat(response.getAttribute("error_fields_create_compte")).isNotEmpty();
     }
 
-    @Test
-    public void it_redirects_to_error_page_if_service_returns_false() throws Exception {
+    @Test public void 
+    it_redirects_to_error_page_if_service_returns_false() throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
         HttpResponse response = mock(HttpResponse.class);
         controler.doAction(accountBean, request, response);
         verify(response).sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
     }
     
-    @Test
-    public void it_redirects_to_error_page_if_service_throws_an_exception() throws Exception {
+    @Test public void 
+    it_redirects_to_error_page_if_service_throws_an_exception() throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
         HttpResponse response = mock(HttpResponse.class);
         // TODO verify the log, using a real instantiated exception
