@@ -6,14 +6,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
 import account.ourdependencies.AccountBean;
-import account.ourdependencies.TechnicalException;
 import account.thirdpartyframework.HttpRequest;
 import account.thirdpartyframework.HttpResponse;
 
