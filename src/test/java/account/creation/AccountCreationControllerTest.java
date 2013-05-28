@@ -34,7 +34,7 @@ public class AccountCreationControllerTest {
         
         controler.doAction(accountBean, request, response);
         
-        verify(service).createAccount(eq(accountBean), any(CreationResponse.class));
+        verify(service).createAccount(eq(accountBean), any(HTTPCreationResponse.class));
     }
 
     

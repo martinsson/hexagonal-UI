@@ -27,7 +27,7 @@ public class AccountServiceTest {
     ProfilService profilService = mock(ProfilService.class);
     DataList datalist = mock(DataList.class);
     AccountService service = new AccountService(userService, profilService, datalist);
-    CreationResponse response = mock(CreationResponse.class);
+    HTTPCreationResponse response = mock(HTTPCreationResponse.class);
 
     @Test public void 
     returns_true_by_default() throws Exception {

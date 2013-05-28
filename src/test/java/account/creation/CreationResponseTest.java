@@ -13,7 +13,7 @@ public class CreationResponseTest {
     @Test public void 
     in_the_case_of_error_it_redirects_to_the_error_page() throws Exception {
         HttpResponse httpResponse = mock(HttpResponse.class);
-        CreationResponse response = new CreationResponse(httpResponse );
+        CreationResponse response = new HTTPCreationResponse(httpResponse );
         response.error();
         verify(httpResponse).sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
     }
@@ -21,7 +21,7 @@ public class CreationResponseTest {
     @Test public void 
     in_the_case_of_success_it_redirects_to_success_page() throws Exception {
         HttpResponse httpResponse = mock(HttpResponse.class);
-        CreationResponse response = new CreationResponse(httpResponse );
+        CreationResponse response = new HTTPCreationResponse(httpResponse );
         response.success();
         verify(httpResponse).setRenderParameter("action", "redirect");
     }

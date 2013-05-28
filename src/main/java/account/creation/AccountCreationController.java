@@ -48,7 +48,7 @@ public class AccountCreationController {
             response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
             response.setRenderParameter("action", "view");
         } else {
-            accountService.createAccount(accountBean, new CreationResponse());
+            accountService.createAccount(accountBean, new HTTPCreationResponse());
         }
     }
 
