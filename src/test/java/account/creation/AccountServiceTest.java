@@ -1,6 +1,5 @@
 package account.creation;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -13,7 +12,11 @@ import account.ourdependencies.AccountBean;
 import account.ourdependencies.DataList;
 import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
+import account.ourdependencies.TechnicalException;
 import account.ourdependencies.UserService;
+import account.thirdpartyframework.UserAPICoreException;
+import account.thirdpartyframework.UserAPIUserException;
+import account.thirdpartyframework.WrefTechnicalException;
 
 
 public class AccountServiceTest {
@@ -55,4 +58,40 @@ public class AccountServiceTest {
         
         assertFalse(result);
     }
+    
+    @Test public void 
+    wraps_exceptions_in_TechnicalException() throws Exception {
+        String siret = "1234567890123";
+        when(profilService.findProfilWithSiret(siret)).thenThrow(new WrefTechnicalException());
+        
+        try {
+            service.createAccount(new AccountBean("", "", siret));
+        } catch (TechnicalException e) {
+            // success
+        }
+    }
+    @Test public void 
+    wraps_exceptions_in_TechnicalException2() throws Exception {
+        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
+        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
+        
+        createAccountExpectingTechnicalException();
+    }
+
+    @Test public void 
+    wraps_exceptions_in_TechnicalException3() throws Exception {
+        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
+        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
+        
+        createAccountExpectingTechnicalException();
+    }
+    
+    private void createAccountExpectingTechnicalException() {
+        try {
+            service.createAccount(new AccountBean("", "", ""));
+        } catch (TechnicalException e) {
+            // success
+        }
+    }
+    
 }

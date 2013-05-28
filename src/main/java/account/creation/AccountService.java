@@ -147,7 +147,7 @@ public class AccountService  {
     private ElementsInfoForMailCreation geneBeanElementsForMail(AccountBean accountBean,
             Object object) {
         // TODO Auto-generated method stub
-        return null;
+        return new ElementsInfoForMailCreation();
     }
 
 
