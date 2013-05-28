@@ -59,9 +59,8 @@ public class AccountService  {
     }
 
 
-    public boolean createAccount(AccountBean accountBean, CreationResponse response) {
+    public void createAccount(AccountBean accountBean, CreationResponse response) {
 
-        boolean resultCreation = true;  
         ElementsInfoForMailCreation elementsInfoForMail = geneBeanElementsForMail(accountBean,
                 null); //Pour que ca marche aussi dans les catch
 
@@ -85,14 +84,12 @@ public class AccountService  {
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
-                resultCreation = false;
                 response.error();
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
                 createMail(new TemplateNetMailCreatEmailSiuBo(elementsInfoForMail, contactEmailBO));
                 
                 createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
                         userInfo.getMail()));
-                resultCreation = false;
                 response.error();
             } else {
                 userService.createAccount(userInfo, accountBean.getPassword(),
@@ -101,7 +98,6 @@ public class AccountService  {
                 createMail(new TemplateNetMailCreationReussieBo(elementsInfoForMail, contactEmailBO));
                 createMail(new TemplateNetMailCreationReussieClient(elementsInfoForMail,
                         userInfo.getMail()));
-                resultCreation = true;
                 response.success();
             }
         } catch (WrefTechnicalException e) {
@@ -125,7 +121,6 @@ public class AccountService  {
             sendMailException(elementsInfoForMail, contactEmailBO);
             response.error();
         }
-        return resultCreation;
 
     }
 
