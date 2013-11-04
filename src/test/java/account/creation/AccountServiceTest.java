@@ -21,14 +21,10 @@ import com.googlecode.zohhak.api.runners.ZohhakRunner;
 
 @RunWith(ZohhakRunner.class)
 public class AccountServiceTest {
-    UserService userService = mock(UserService.class);
-    ProfilService profilService = mock(ProfilService.class);
-    DataList datalist = mock(DataList.class);
-    AccountService service = new AccountService(userService, profilService, datalist);
-    HTTPCreationResponse response = mock(HTTPCreationResponse.class);
 
     @Test public void 
     is_successful_by_default() throws Exception {
+
         String siret = "1234567890123";
         when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
         
@@ -94,5 +90,10 @@ public class AccountServiceTest {
     public Exception whicheverException(String name) throws Exception {
         return (Exception) Class.forName(name).newInstance();
     }
+    UserService userService = mock(UserService.class);
+    ProfilService profilService = mock(ProfilService.class);
+    DataList datalist = mock(DataList.class);
+    AccountService service = new AccountService(userService, profilService, datalist);
+    HTTPCreationResponse response = mock(HTTPCreationResponse.class);
     
 }
