@@ -25,6 +25,11 @@
       <version>2.0M8</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.googlecode.zohhak</groupId>
+      <artifactId>zohhak</artifactId>
+      <version>1.0.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

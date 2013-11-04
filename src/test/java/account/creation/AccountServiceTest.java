@@ -1,27 +1,25 @@
 package account.creation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import account.ourdependencies.AccountBean;
 import account.ourdependencies.DataList;
 import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
-import account.ourdependencies.TechnicalException;
 import account.ourdependencies.UserService;
-import account.thirdpartyframework.PortalException;
-import account.thirdpartyframework.SystemException;
-import account.thirdpartyframework.UserAPICoreException;
-import account.thirdpartyframework.UserAPIUserException;
 import account.thirdpartyframework.WrefTechnicalException;
 
+import com.googlecode.zohhak.api.Coercion;
+import com.googlecode.zohhak.api.TestWith;
+import com.googlecode.zohhak.api.runners.ZohhakRunner;
 
+@RunWith(ZohhakRunner.class)
 public class AccountServiceTest {
     UserService userService = mock(UserService.class);
     ProfilService profilService = mock(ProfilService.class);
@@ -64,46 +62,37 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    fails_in_the_case_of_an_exception() throws Exception {
+    fails_if_the_user_cant_be_found() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
         service.createAccount(new AccountBean("", "", ""), response);
         verify(response).error();
     }
-    
-    @Test public void 
-    fails_in_the_case_of_an_exception2() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
-        
-        service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
-    }
 
-    @Test public void 
-    fails_in_the_case_of_an_exception3() throws Exception {
+    @TestWith({
+        "account.thirdpartyframework.UserAPIUserException",
+        "account.thirdpartyframework.UserAPICoreException",
+    }) public void 
+    fails_in_the_case_of_emailCheckFailure(Exception e) throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
-        
+        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(e);
         service.createAccount(new AccountBean("", "", ""), response);
         verify(response).error();
     }
     
-    @Test public void 
-    fails_in_the_case_of_an_exception4() throws Exception {
+    @TestWith({
+        "account.thirdpartyframework.PortalException",
+        "account.thirdpartyframework.SystemException",
+    }) public void 
+    fails_in_the_case_of_siretCheckFailure(Exception e) throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
-        
+        when(datalist.findAndCheckSiret(anyString())).thenThrow(e);
         service.createAccount(new AccountBean("", "", ""), response);
         verify(response).error();
     }
-
-    @Test public void 
-    fails_in_the_case_of_an_exception5() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
-        
-        service.createAccount(new AccountBean("", "", ""), response);
-        verify(response).error();
+    
+    @Coercion 
+    public Exception whicheverException(String name) throws Exception {
+        return (Exception) Class.forName(name).newInstance();
     }
     
 }
