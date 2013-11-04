@@ -30,7 +30,7 @@ public class AccountServiceTest {
     HTTPCreationResponse response = mock(HTTPCreationResponse.class);
 
     @Test public void 
-    returns_true_by_default() throws Exception {
+    is_successful_by_default() throws Exception {
         String siret = "1234567890123";
         when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
         
@@ -40,7 +40,7 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    returns_false_if_siret_is_restricted() throws Exception {
+    fails_if_siret_is_restricted() throws Exception {
         String restrictedSiret = "1112223334445";
         ModelProfil modelProfil = new ModelProfil();
         when(profilService.findProfilWithSiret(restrictedSiret)).thenReturn(modelProfil);
@@ -52,7 +52,7 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    returns_false_if_email_is_already_used() throws Exception {
+    fails_if_email_is_already_used() throws Exception {
         ModelProfil modelProfil = new ModelProfil();
         when(profilService.findProfilWithSiret(anyString())).thenReturn(modelProfil);
         String email = "bill@gates.org";
@@ -64,14 +64,14 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
+    fails_in_the_case_of_an_exception() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
         service.createAccount(new AccountBean("", "", ""), response);
         verify(response).error();
     }
     
     @Test public void 
-    wraps_exceptions_in_TechnicalException2() throws Exception {
+    fails_in_the_case_of_an_exception2() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
         
@@ -80,7 +80,7 @@ public class AccountServiceTest {
     }
 
     @Test public void 
-    wraps_exceptions_in_TechnicalException3() throws Exception {
+    fails_in_the_case_of_an_exception3() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
@@ -89,7 +89,7 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    wraps_exceptions_in_TechnicalException4() throws Exception {
+    fails_in_the_case_of_an_exception4() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
         
@@ -98,7 +98,7 @@ public class AccountServiceTest {
     }
 
     @Test public void 
-    wraps_exceptions_in_TechnicalException5() throws Exception {
+    fails_in_the_case_of_an_exception5() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
         
