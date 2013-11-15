@@ -32,45 +32,31 @@ public class AccountCreationController {
 
     private AccountService accountService;
 
-
     public AccountCreationController(AccountService accountService) {
         this.accountService = accountService;
     }
 
-
     @ActionMapping(params = "action=doFormAction")
-    public void doAction(@ModelAttribute AccountBean accountBean, HttpRequest request,
-             HttpResponse response) throws IOException {
+    public void doAction(@ModelAttribute AccountBean accountBean, HttpRequest request, HttpResponse response) throws IOException {
 
-        boolean compteCree = false;
         ErrorsList listErrorFields = checkFieldsForm(accountBean);
 
         if (listErrorFields.hasError()) {
             response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
             response.setRenderParameter("action", "view");
         } else {
-            try {
-                compteCree = accountService.createAccount(accountBean);
-            } catch (TechnicalException e) {
-                LOG.warning("creation du compte impossible", e.getMessage());
-            }
-            if (compteCree) {
-                response.setRenderParameter("action", "redirect");
-            } else {
-                response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
-            }
+            CreationResponse creationResponse = new HttpCreationResponse(response);
+            accountService.createAccount(accountBean, creationResponse);
         }
     }
 
-
     private account.ourdependencies.ErrorsList checkFieldsForm(AccountBean eceAccountBean) {
-        
+
         ErrorsList errorsList = new ErrorsList();
         if (eceAccountBean.getEmail() == null) {
             errorsList.add("email missing");
-        } 
+        }
         return errorsList;
     }
-
 
 }

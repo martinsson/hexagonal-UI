@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
@@ -26,27 +27,28 @@ public class AccountServiceTest {
     ProfilService profilService = mock(ProfilService.class);
     DataList datalist = mock(DataList.class);
     AccountService service = new AccountService(userService, profilService, datalist);
+    CreationResponse creationResponse = mock(CreationResponse.class);
 
     @Test public void 
-    returns_true_by_default() throws Exception {
+    indicates_that_account_is_created() throws Exception {
         String siret = "1234567890123";
         when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
         
-        boolean result = service.createAccount(new AccountBean("", "", siret));
-        
-        assertTrue(result);
+        service.createAccount(new AccountBean("", "", siret), creationResponse);
+     
+        verify(creationResponse).success();
     }
     
     @Test public void 
-    returns_false_if_siret_is_restricted() throws Exception {
+    indicates_pending_creation_when_sire_is_restricted() throws Exception {
         String restrictedSiret = "1112223334445";
         ModelProfil modelProfil = new ModelProfil();
         when(profilService.findProfilWithSiret(restrictedSiret)).thenReturn(modelProfil);
         when(datalist.findAndCheckSiret(restrictedSiret)).thenReturn(true);
 
-        boolean result = service.createAccount(new AccountBean("", "", restrictedSiret));
+        service.createAccount(new AccountBean("", "", restrictedSiret), creationResponse);
         
-        assertFalse(result);
+        verify(creationResponse).pending();
     }
     
     @Test public void 
@@ -56,47 +58,52 @@ public class AccountServiceTest {
         String email = "bill@gates.org";
         when(userService.isEmailAlreadyUsed(email)).thenReturn(true);
         
-        boolean result = service.createAccount(new AccountBean("", email, ""));
+        service.createAccount(new AccountBean("", email, ""), creationResponse);
         
-        assertFalse(result);
+        verify(creationResponse).pending();
     }
     
-    @Test(expected=TechnicalException.class) public void 
-    wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
+    @Test public void 
+    indicates_pending_when_user_cant_be_searched() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), creationResponse);
+        verify(creationResponse).pending();
     }
     
-    @Test(expected=TechnicalException.class) public void 
+    @Test public void 
     wraps_exceptions_in_TechnicalException2() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), creationResponse);
+        verify(creationResponse).pending();
     }
 
-    @Test(expected=TechnicalException.class) public void 
+    @Test public void 
     wraps_exceptions_in_TechnicalException3() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), creationResponse);
+        verify(creationResponse).pending();
     }
     
-    @Test(expected=TechnicalException.class) public void 
+    @Test public void 
     wraps_exceptions_in_TechnicalException4() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), creationResponse);
+        verify(creationResponse).pending();
     }
 
-    @Test(expected=TechnicalException.class) public void 
+    @Test public void 
     wraps_exceptions_in_TechnicalException5() throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
         when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
         
-        service.createAccount(new AccountBean("", "", ""));
+        service.createAccount(new AccountBean("", "", ""), creationResponse);
+        verify(creationResponse).pending();
     }
     
 }
