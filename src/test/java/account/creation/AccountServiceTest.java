@@ -67,36 +67,4 @@ public class AccountServiceTest {
         service.createAccount(new AccountBean("", "", ""));
     }
     
-    @Test(expected=TechnicalException.class) public void 
-    wraps_exceptions_in_TechnicalException2() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPIUserException());
-        
-        service.createAccount(new AccountBean("", "", ""));
-    }
-
-    @Test(expected=TechnicalException.class) public void 
-    wraps_exceptions_in_TechnicalException3() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(userService.isEmailAlreadyUsed(anyString())).thenThrow(new UserAPICoreException());
-        
-        service.createAccount(new AccountBean("", "", ""));
-    }
-    
-    @Test(expected=TechnicalException.class) public void 
-    wraps_exceptions_in_TechnicalException4() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(datalist.findAndCheckSiret(anyString())).thenThrow(new PortalException());
-        
-        service.createAccount(new AccountBean("", "", ""));
-    }
-
-    @Test(expected=TechnicalException.class) public void 
-    wraps_exceptions_in_TechnicalException5() throws Exception {
-        when(profilService.findProfilWithSiret(anyString())).thenReturn(new ModelProfil());
-        when(datalist.findAndCheckSiret(anyString())).thenThrow(new SystemException());
-        
-        service.createAccount(new AccountBean("", "", ""));
-    }
-    
 }

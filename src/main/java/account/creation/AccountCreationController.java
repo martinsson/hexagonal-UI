@@ -3,7 +3,6 @@ package account.creation;
 import java.io.IOException;
 
 import account.ourdependencies.AccountBean;
-import account.ourdependencies.ErrorsList;
 import account.ourdependencies.Log;
 import account.ourdependencies.LogTool;
 import account.ourdependencies.TechnicalException;
@@ -43,33 +42,17 @@ public class AccountCreationController {
              HttpResponse response) throws IOException {
 
         boolean compteCree = false;
-        ErrorsList listErrorFields = checkFieldsForm(accountBean);
 
-        if (listErrorFields.hasError()) {
-            response.setAttribute("error_fields_create_compte", listErrorFields.generateObjectJson());
-            response.setRenderParameter("action", "view");
-        } else {
-            try {
-                compteCree = accountService.createAccount(accountBean);
-            } catch (TechnicalException e) {
-                LOG.warning("creation du compte impossible", e.getMessage());
-            }
-            if (compteCree) {
-                response.setRenderParameter("action", "redirect");
-            } else {
-                response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
-            }
+        try {
+            compteCree = accountService.createAccount(accountBean);
+        } catch (TechnicalException e) {
+            LOG.warning("creation du compte impossible", e.getMessage());
         }
-    }
-
-
-    private account.ourdependencies.ErrorsList checkFieldsForm(AccountBean eceAccountBean) {
-        
-        ErrorsList errorsList = new ErrorsList();
-        if (eceAccountBean.getEmail() == null) {
-            errorsList.add("email missing");
-        } 
-        return errorsList;
+        if (compteCree) {
+            response.setRenderParameter("action", "redirect");
+        } else {
+            response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
+        }
     }
 
 

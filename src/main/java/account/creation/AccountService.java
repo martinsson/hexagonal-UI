@@ -32,7 +32,7 @@ import account.thirdpartyframework.WrefTechnicalException;
  * 
  */
 @Component
-public class AccountService  {
+public class AccountService {
 
     private static final Log LOG = account.ourdependencies.LogTool.logFor(AccountService.class);
 
@@ -40,7 +40,6 @@ public class AccountService  {
     private final ProfilService profilService;
 
     private DataList dataList;
-
 
     /**
      * 
@@ -51,88 +50,54 @@ public class AccountService  {
         this(service, new ProfilService(), new DataList());
     }
 
- 
     public AccountService(UserService userService, ProfilService profilService, DataList datalist) {
         this.userService = userService;
         this.profilService = profilService;
         this.dataList = datalist;
     }
 
-
     public boolean createAccount(AccountBean accountBean) throws account.ourdependencies.TechnicalException {
-
-        boolean resultCreation = true;  
-        ElementsInfoForMailCreation elementsInfoForMail = geneBeanElementsForMail(accountBean,
-                null); //Pour que ca marche aussi dans les catch
-
-        UserInfo userInfo = fillSIUUserInfoFromEceAccountBean(accountBean);
-        String contactEmailBO = findEmailBackOffice(null);
-
+        boolean resultCreation = true;
         try {
+            ModelProfil modelProfil = profilService.findProfilWithSiret(accountBean.getSiret());
 
-            ModelProfil modelProfil = profilService.findProfilWithSiret(accountBean
-                    .getSiret());
-            userInfo.setIdent(modelProfil.getIdent());
-            userInfo.setIdeta(modelProfil.getIdeta());
-
-            elementsInfoForMail = geneBeanElementsForMail(accountBean, modelProfil);
-
-            contactEmailBO = findEmailBackOffice(modelProfil.getSegClientel());
-
+            ElementsInfoForMailCreation elementsInfoForMail = geneBeanElementsForMail(accountBean, modelProfil);
+            String contactEmailBO = findEmailBackOffice(modelProfil.getSegClientel());
 
             if (dataList.findAndCheckSiret(accountBean.getSiret())) {
                 createMail(new TemplateNetMailCreatSiretRestrBo(elementsInfoForMail, contactEmailBO));
-                
-                createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
-                        userInfo.getMail()));
                 resultCreation = false;
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
                 createMail(new TemplateNetMailCreatEmailSiuBo(elementsInfoForMail, contactEmailBO));
-                
-                createMail(new TemplateNetMailCreatSiretRestrClient(elementsInfoForMail,
-                        userInfo.getMail()));
                 resultCreation = false;
             } else {
-                userService.createAccount(userInfo, accountBean.getPassword(),
-                        accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
-                
+                UserInfo userInfo = assembleUserInfo(accountBean, modelProfil);
+                userService.createAccount(userInfo, accountBean.getPassword(), accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
                 createMail(new TemplateNetMailCreationReussieBo(elementsInfoForMail, contactEmailBO));
-                createMail(new TemplateNetMailCreationReussieClient(elementsInfoForMail,
-                        userInfo.getMail()));
                 resultCreation = true;
             }
         } catch (WrefTechnicalException e) {
             LOG.warning("WrefTechnicalException: " + e.getMessage());
-            sendMailException(elementsInfoForMail, contactEmailBO);
+            ElementsInfoForMailCreation elementsInfoForMail = new ElementsInfoForMailCreation();
+            String contactEmailBO = findEmailBackOffice(null);
+            createMail(new TemplateNetMailCreationKoBo(elementsInfoForMail, contactEmailBO));
             throw new TechnicalException(e);
-        } catch (UserAPIUserException e) {
-            LOG.warning(e.getMessage());
-            sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
-        } catch (UserAPICoreException e) {
-            LOG.warning(e.getMessage());
-            sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
-        } catch (SystemException e) {
-            LOG.warning("System exception", e.getMessage());
-            sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(e);
-        } catch (PortalException p) {
-            LOG.warning("PortalException : ", p.getMessage());
-            sendMailException(elementsInfoForMail, contactEmailBO);
-            throw new TechnicalException(p);
         }
         return resultCreation;
 
     }
 
+    private UserInfo assembleUserInfo(AccountBean accountBean, ModelProfil modelProfil) {
+        UserInfo userInfo = fillSIUUserInfoFromEceAccountBean(accountBean);
+        userInfo.setIdent(modelProfil.getIdent());
+        return userInfo;
+    }
 
     private String findEmailBackOffice(Object object) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    
     private void createMail(TemplateMail template) {
         // TODO Auto-generated method stub
 
@@ -142,31 +107,14 @@ public class AccountService  {
         return new UserInfo();
     }
 
-
-    private ElementsInfoForMailCreation geneBeanElementsForMail(AccountBean accountBean,
-            Object object) {
+    private ElementsInfoForMailCreation geneBeanElementsForMail(AccountBean accountBean, Object object) {
         // TODO Auto-generated method stub
         return new ElementsInfoForMailCreation();
-    }
-
-
-    /**
-     * 
-     * @param siuUserInfo
-     * @param contactEmailBO
-     */
-    private void sendMailException(ElementsInfoForMailCreation elementsInfoForMail,
-            String contactEmailBO) {
-        createMail(new TemplateNetMailCreationKoBo(elementsInfoForMail, contactEmailBO));
-        createMail(new TemplateNetMailCreationKoClient(elementsInfoForMail,
-                elementsInfoForMail.getMail()));
     }
 
     public String findRaisonSociale(String siret) throws TechnicalException {
         return null;
     }
-
-
 
     protected String findConditionGeneVente(AccountBean accountBean) {
         return null;
