@@ -2,19 +2,22 @@ package account.ourdependencies;
 
 public class ModelProfil {
 
+    private String siret;
+
+    public ModelProfil(String siret) {
+        this.siret = siret;
+    }
+
     public String getIdent() {
-        // TODO Auto-generated method stub
-        return null;
+        return siret.hashCode()+ "";
     }
 
     public String getIdeta() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public String getSegClientel() {
-        // TODO Auto-generated method stub
-        return null;
+        return "grand compte";
     }
 
 }

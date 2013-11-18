@@ -23,7 +23,7 @@ public class AccountServiceTest {
     returns_true_by_default() 
             throws Exception {
         String siret = "1234567890123";
-        when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
+        when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil(siret));
         
         boolean result = service.createAccount(new AccountBean("", "", siret));
         
@@ -34,7 +34,7 @@ public class AccountServiceTest {
     returns_false_if_siret_is_restricted() 
             throws Exception {
         String restrictedSiret = "1112223334445";
-        ModelProfil modelProfil = new ModelProfil();
+        ModelProfil modelProfil = new ModelProfil(restrictedSiret);
         when(profilService.findProfilWithSiret(restrictedSiret)).thenReturn(modelProfil);
         when(datalist.findAndCheckSiret(restrictedSiret)).thenReturn(true);
 
@@ -46,7 +46,7 @@ public class AccountServiceTest {
     @Test public void 
     returns_false_if_email_is_already_used() 
             throws Exception {
-        ModelProfil modelProfil = new ModelProfil();
+        ModelProfil modelProfil = new ModelProfil("");
         when(profilService.findProfilWithSiret(anyString())).thenReturn(modelProfil);
         String email = "bill@gates.org";
         when(userService.isEmailAlreadyUsed(email)).thenReturn(true);

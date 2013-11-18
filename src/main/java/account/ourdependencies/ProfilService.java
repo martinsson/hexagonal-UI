@@ -6,7 +6,8 @@ public class ProfilService {
 
     public ModelProfil findProfilWithSiret(String siret) throws WrefTechnicalException{
         // TODO Auto-generated method stub
-        return null;
+        ModelProfil modelProfil = new ModelProfil(siret);
+        return modelProfil;
     }
 
 }
