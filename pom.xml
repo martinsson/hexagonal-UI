@@ -25,6 +25,12 @@
       <version>2.0M8</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.github.approvals</groupId>
+      <artifactId>ApprovalTests</artifactId>
+      <version>0.13</version>
+    </dependency>
+    
   </dependencies>
   <build>
     <plugins>
