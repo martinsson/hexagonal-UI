@@ -31,25 +31,21 @@ public class GoldenMasterTest {
         
     }
     
-    public String callACC(String email, String siret, Boolean siretException, Boolean restricted, Boolean emailUsed) throws IOException {
+    public String callACC(String email, String siret, Boolean siretException, Boolean restricted, Boolean emailUsed) throws IOException, WrefTechnicalException {
         ProfilService profilService = spy(new  ProfilService());
         UserService userService = spy(new UserService());
         DataList datalist = spy(new DataList());
         
         doReturn(emailUsed).when(userService).isEmailAlreadyUsed(email);
-//        if (siretException)
-//            System.out.println("");
-////            doThrow(new WrefTechnicalException()).when(datalist).findAndCheckSiret(siret);
-//        else
-            doReturn(restricted).when(datalist).findAndCheckSiret(siret);
+        doReturn(restricted).when(datalist).findAndCheckSiret(siret);
+        if (siretException)
+            doThrow(new WrefTechnicalException()).when(profilService).findProfilWithSiret(siret);
         
         AccountCreationController controller = new AccountCreationController(new AccountService(userService, profilService, datalist));
         HttpResponse response = new HttpResponse();
         controller.doAction(new AccountBean(null, email, siret), null, response);
         
         return response.toString();
-        // TODO Auto-generated method stub
-
     }
-
+    
 }
