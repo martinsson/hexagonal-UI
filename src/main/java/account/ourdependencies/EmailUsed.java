@@ -1,6 +1,6 @@
 package account.ourdependencies;
 
-public class EmailUsed extends TemplateMail {
+public class EmailUsed extends Email {
 
     public EmailUsed(ElementsInfoForMailCreation elementsInfoForMail,
             String contactEmailBO) {

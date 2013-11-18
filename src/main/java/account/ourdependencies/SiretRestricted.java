@@ -1,6 +1,6 @@
 package account.ourdependencies;
 
-public class SiretRestricted extends TemplateMail {
+public class SiretRestricted extends Email {
 
     public SiretRestricted(ElementsInfoForMailCreation elementsInfoForMail,
             String contactEmailBO) {

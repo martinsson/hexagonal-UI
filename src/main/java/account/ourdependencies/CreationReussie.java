@@ -1,6 +1,6 @@
 package account.ourdependencies;
 
-public class CreationReussie extends TemplateMail {
+public class CreationReussie extends Email {
 
     public CreationReussie(ElementsInfoForMailCreation elementsInfoForMail,
             String contactEmailBO) {

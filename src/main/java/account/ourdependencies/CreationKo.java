@@ -1,6 +1,6 @@
 package account.ourdependencies;
 
-public class CreationKo extends TemplateMail {
+public class CreationKo extends Email {
 
     public CreationKo(AccountBean accountBean,
             String contactEmailBO) {

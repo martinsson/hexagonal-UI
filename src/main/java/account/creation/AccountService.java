@@ -10,7 +10,7 @@ import account.ourdependencies.Log;
 import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
 import account.ourdependencies.TechnicalException;
-import account.ourdependencies.TemplateMail;
+import account.ourdependencies.Email;
 import account.ourdependencies.EmailUsed;
 import account.ourdependencies.SiretRestricted;
 import account.ourdependencies.CreationKo;
@@ -85,7 +85,7 @@ public class AccountService {
         return null;
     }
 
-    private void createMail(TemplateMail template) {
+    private void createMail(Email template) {
     }
 
     public String findRaisonSociale(String siret) throws TechnicalException {

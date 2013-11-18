@@ -1,5 +1,5 @@
 package account.ourdependencies;
 
-public class TemplateMail {
+public class Email {
 
 }
