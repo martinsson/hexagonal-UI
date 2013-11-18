@@ -1,11 +1,11 @@
 package account.creation;
 
 import static account.creation.AccountCreationController.DEFAULT_FINAL_URL_NO_CREATED;
-import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import account.ourdependencies.AccountBean;
@@ -13,6 +13,7 @@ import account.ourdependencies.TechnicalException;
 import account.thirdpartyframework.HttpRequest;
 import account.thirdpartyframework.HttpResponse;
 
+@Ignore
 public class AccountCreationControllerTest {
 
     @Test public void 
