@@ -14,14 +14,10 @@ import account.thirdpartyframework.HttpRequest;
 import account.thirdpartyframework.HttpResponse;
 
 public class AccountCreationControllerTest {
-    private AccountService service = mock(AccountService.class);
-    AccountCreationController controler = new AccountCreationController(service );
-    HttpResponse response = new HttpResponse();
-    HttpRequest request = new HttpRequest();
-    AccountBean accountBean = new AccountBean();
 
     @Test public void 
-    it_redirects_to_error_page_if_service_returns_false() throws Exception {
+    it_redirects_to_error_page_if_service_returns_false() 
+            throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
         HttpResponse response = mock(HttpResponse.class);
         controler.doAction(accountBean, request, response);
@@ -29,7 +25,8 @@ public class AccountCreationControllerTest {
     }
     
     @Test public void 
-    it_redirects_to_error_page_if_service_throws_an_exception() throws Exception {
+    it_redirects_to_error_page_if_service_throws_an_exception() 
+            throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
         HttpResponse response = mock(HttpResponse.class);
         // TODO verify the log, using a real instantiated exception
@@ -39,7 +36,8 @@ public class AccountCreationControllerTest {
     }
     
     @Test public void 
-    it_redirects_to_success_page_if_service_returns_true() throws Exception {
+    it_redirects_to_success_page_if_service_returns_true() 
+            throws Exception {
         AccountBean accountBean = new AccountBean("password", "email@home", "siret");
         HttpResponse response = mock(HttpResponse.class);
         when(service.createAccount(accountBean)).thenReturn(true);
@@ -47,4 +45,9 @@ public class AccountCreationControllerTest {
         verify(response).setRenderParameter("action", "redirect");
     }
 
+    private AccountService service = mock(AccountService.class);
+    AccountCreationController controler = new AccountCreationController(service );
+    HttpResponse response = new HttpResponse();
+    HttpRequest request = new HttpRequest();
+    AccountBean accountBean = new AccountBean();
 }

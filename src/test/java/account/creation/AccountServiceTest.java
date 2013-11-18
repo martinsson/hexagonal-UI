@@ -22,13 +22,10 @@ import account.thirdpartyframework.WrefTechnicalException;
 
 
 public class AccountServiceTest {
-    UserService userService = mock(UserService.class);
-    ProfilService profilService = mock(ProfilService.class);
-    DataList datalist = mock(DataList.class);
-    AccountService service = new AccountService(userService, profilService, datalist);
 
     @Test public void 
-    returns_true_by_default() throws Exception {
+    returns_true_by_default() 
+            throws Exception {
         String siret = "1234567890123";
         when(profilService.findProfilWithSiret(siret)).thenReturn(new ModelProfil());
         
@@ -38,7 +35,8 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    returns_false_if_siret_is_restricted() throws Exception {
+    returns_false_if_siret_is_restricted() 
+            throws Exception {
         String restrictedSiret = "1112223334445";
         ModelProfil modelProfil = new ModelProfil();
         when(profilService.findProfilWithSiret(restrictedSiret)).thenReturn(modelProfil);
@@ -50,7 +48,8 @@ public class AccountServiceTest {
     }
     
     @Test public void 
-    returns_false_if_email_is_already_used() throws Exception {
+    returns_false_if_email_is_already_used() 
+            throws Exception {
         ModelProfil modelProfil = new ModelProfil();
         when(profilService.findProfilWithSiret(anyString())).thenReturn(modelProfil);
         String email = "bill@gates.org";
@@ -62,9 +61,16 @@ public class AccountServiceTest {
     }
     
     @Test(expected=TechnicalException.class) public void 
-    wraps_WrefTechnicalException_in_TechnicalException() throws Exception {
+    wraps_WrefTechnicalException_in_TechnicalException() 
+            throws Exception {
         when(profilService.findProfilWithSiret(anyString())).thenThrow(new WrefTechnicalException());
         service.createAccount(new AccountBean("", "", ""));
     }
     
+    UserService userService = mock(UserService.class);
+    ProfilService profilService = mock(ProfilService.class);
+    DataList datalist = mock(DataList.class);
+    AccountService service = new AccountService(userService, profilService, datalist);
+
+
 }
