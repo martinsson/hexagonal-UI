@@ -11,27 +11,14 @@ import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
 import account.ourdependencies.TechnicalException;
 import account.ourdependencies.TemplateMail;
-import account.ourdependencies.TemplateNetMailCreatEmailSiuBo;
-import account.ourdependencies.TemplateNetMailCreatSiretRestrBo;
-import account.ourdependencies.TemplateNetMailCreatSiretRestrClient;
-import account.ourdependencies.TemplateNetMailCreationKoBo;
-import account.ourdependencies.TemplateNetMailCreationKoClient;
-import account.ourdependencies.TemplateNetMailCreationReussieBo;
-import account.ourdependencies.TemplateNetMailCreationReussieClient;
+import account.ourdependencies.EmailUsed;
+import account.ourdependencies.SiretRestricted;
+import account.ourdependencies.CreationKo;
+import account.ourdependencies.CreationReussie;
 import account.ourdependencies.UserInfo;
 import account.ourdependencies.UserService;
-import account.thirdpartyframework.Component;
-import account.thirdpartyframework.PortalException;
-import account.thirdpartyframework.SystemException;
-import account.thirdpartyframework.UserAPICoreException;
-import account.thirdpartyframework.UserAPIUserException;
 import account.thirdpartyframework.WrefTechnicalException;
 
-/**
- * gestion des comptes
- * 
- */
-@Component
 public class AccountService {
 
     private static final Log LOG = account.ourdependencies.LogTool.logFor(AccountService.class);
@@ -40,15 +27,6 @@ public class AccountService {
     private final ProfilService profilService;
 
     private DataList dataList;
-
-    /**
-     * 
-     * @param userService
-     * @param service
-     */
-    public AccountService(UserService service) {
-        this(service, new ProfilService(), new DataList());
-    }
 
     public AccountService(UserService userService, ProfilService profilService, DataList datalist) {
         this.userService = userService;
@@ -65,22 +43,20 @@ public class AccountService {
             String contactEmailBO = findEmailBackOffice(modelProfil.getSegClientel());
 
             if (dataList.findAndCheckSiret(accountBean.getSiret())) {
-                createMail(new TemplateNetMailCreatSiretRestrBo(elementsInfoForMail, contactEmailBO));
+                createMail(new SiretRestricted(elementsInfoForMail, contactEmailBO));
                 resultCreation = false;
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
-                createMail(new TemplateNetMailCreatEmailSiuBo(elementsInfoForMail, contactEmailBO));
+                createMail(new EmailUsed(elementsInfoForMail, contactEmailBO));
                 resultCreation = false;
             } else {
                 UserInfo userInfo = assembleUserInfo(accountBean, modelProfil);
                 userService.createAccount(userInfo, accountBean.getPassword(), accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
-                createMail(new TemplateNetMailCreationReussieBo(elementsInfoForMail, contactEmailBO));
+                createMail(new CreationReussie(elementsInfoForMail, contactEmailBO));
                 resultCreation = true;
             }
         } catch (WrefTechnicalException e) {
             LOG.warning("WrefTechnicalException: " + e.getMessage());
-            ElementsInfoForMailCreation elementsInfoForMail = new ElementsInfoForMailCreation();
-            String contactEmailBO = findEmailBackOffice(null);
-            createMail(new TemplateNetMailCreationKoBo(elementsInfoForMail, contactEmailBO));
+            createMail(new CreationKo(accountBean, defaultBoEmail()));
             throw new TechnicalException(e);
         }
         return resultCreation;
@@ -92,24 +68,24 @@ public class AccountService {
         userInfo.setIdent(modelProfil.getIdent());
         return userInfo;
     }
+    
+    private UserInfo fillSIUUserInfoFromEceAccountBean(AccountBean accountBean) {
+        return new UserInfo();
+    }
+    
+    private ElementsInfoForMailCreation geneBeanElementsForMail(AccountBean accountBean, Object object) {
+        return new ElementsInfoForMailCreation();
+    }
+    
+    private String defaultBoEmail() {
+        return null;
+    }
 
     private String findEmailBackOffice(Object object) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     private void createMail(TemplateMail template) {
-        // TODO Auto-generated method stub
-
-    }
-
-    private UserInfo fillSIUUserInfoFromEceAccountBean(AccountBean accountBean) {
-        return new UserInfo();
-    }
-
-    private ElementsInfoForMailCreation geneBeanElementsForMail(AccountBean accountBean, Object object) {
-        // TODO Auto-generated method stub
-        return new ElementsInfoForMailCreation();
     }
 
     public String findRaisonSociale(String siret) throws TechnicalException {

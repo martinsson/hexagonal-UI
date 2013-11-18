@@ -14,10 +14,6 @@ import account.ourdependencies.ModelProfil;
 import account.ourdependencies.ProfilService;
 import account.ourdependencies.TechnicalException;
 import account.ourdependencies.UserService;
-import account.thirdpartyframework.PortalException;
-import account.thirdpartyframework.SystemException;
-import account.thirdpartyframework.UserAPICoreException;
-import account.thirdpartyframework.UserAPIUserException;
 import account.thirdpartyframework.WrefTechnicalException;
 
 
