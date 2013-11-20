@@ -34,8 +34,7 @@ public class AccountService {
         this.dataList = datalist;
     }
 
-    public boolean createAccount(AccountBean accountBean) throws account.ourdependencies.TechnicalException {
-        boolean resultCreation = true;
+    public void createAccount(AccountBean accountBean, CreationResponse creationResponse) {
         try {
             ModelProfil modelProfil = profilService.findProfilWithSiret(accountBean.getSiret());
 
@@ -44,23 +43,21 @@ public class AccountService {
 
             if (dataList.findAndCheckSiret(accountBean.getSiret())) {
                 createMail(new SiretRestricted(elementsInfoForMail, contactEmailBO));
-                resultCreation = false;
+                creationResponse.pending();
             } else if (userService.isEmailAlreadyUsed(accountBean.getEmail())) {
                 createMail(new EmailUsed(elementsInfoForMail, contactEmailBO));
-                resultCreation = false;
+                creationResponse.pending();
             } else {
                 UserInfo userInfo = assembleUserInfo(accountBean, modelProfil);
                 userService.createAccount(userInfo, accountBean.getPassword(), accountBean.getCondGeneInternet(), accountBean.getCondGeneMobile());
                 createMail(new CreationReussie(elementsInfoForMail, contactEmailBO));
-                resultCreation = true;
+                creationResponse.success();
             }
         } catch (WrefTechnicalException e) {
             LOG.warning("WrefTechnicalException: " + e.getMessage());
             createMail(new CreationKo(accountBean, defaultBoEmail()));
-            throw new TechnicalException(e);
+            creationResponse.pending();
         }
-        return resultCreation;
-
     }
 
     private UserInfo assembleUserInfo(AccountBean accountBean, ModelProfil modelProfil) {
