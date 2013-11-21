@@ -22,6 +22,25 @@ import account.thirdpartyframework.RequestMapping;
 @RequestMapping("VIEW")
 public class AccountCreationController {
 
+    public static final class HttpCreationResponse implements CreationResponse {
+        private final HttpResponse response;
+
+        public HttpCreationResponse(HttpResponse response) {
+            this.response = response;
+        }
+
+        public void success() {
+            response.setRenderParameter("action", "redirect");
+            
+        }
+
+        public void pending() {
+            response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
+            
+        }
+    }
+
+
     static final Log LOG = LogTool.logFor(AccountCreationController.class);
 
     public static final int MAX_SIU_TRIES = 4;
@@ -39,20 +58,11 @@ public class AccountCreationController {
 
     @ActionMapping(params = "action=doFormAction")
     public void doAction(@ModelAttribute AccountBean accountBean, HttpRequest request,
-             HttpResponse response) throws IOException {
+             final HttpResponse response) throws IOException {
 
-        boolean compteCree = false;
 
-        try {
-            compteCree = accountService.createAccount(accountBean);
-        } catch (TechnicalException e) {
-            LOG.warning("creation du compte impossible", e.getMessage());
-        }
-        if (compteCree) {
-            response.setRenderParameter("action", "redirect");
-        } else {
-            response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
-        }
+        CreationResponse creationResponse = new HttpCreationResponse(response);
+        accountService.createAccount(accountBean, creationResponse);
     }
 
 
