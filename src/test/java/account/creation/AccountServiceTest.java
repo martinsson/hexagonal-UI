@@ -6,6 +6,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import account.ourdependencies.AccountBean;
@@ -17,6 +18,7 @@ import account.ourdependencies.UserService;
 import account.thirdpartyframework.WrefTechnicalException;
 
 
+@Ignore
 public class AccountServiceTest {
 
     @Test public void 
