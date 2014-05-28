@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 
-import account.creation.AccountCreationController.HttpCreationResponse;
 import account.ourdependencies.AccountBean;
 import account.thirdpartyframework.HttpRequest;
 import account.thirdpartyframework.HttpResponse;

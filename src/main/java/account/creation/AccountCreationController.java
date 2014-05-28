@@ -22,31 +22,12 @@ import account.thirdpartyframework.RequestMapping;
 @RequestMapping("VIEW")
 public class AccountCreationController {
 
-    public static final class HttpCreationResponse implements CreationResponse {
-        private final HttpResponse response;
-
-        public HttpCreationResponse(HttpResponse response) {
-            this.response = response;
-        }
-
-        public void success() {
-            response.setRenderParameter("action", "redirect");
-            
-        }
-
-        public void pending() {
-            response.sendRedirect(DEFAULT_FINAL_URL_NO_CREATED);
-            
-        }
-    }
-
-
     static final Log LOG = LogTool.logFor(AccountCreationController.class);
 
     public static final int MAX_SIU_TRIES = 4;
     public static final int WAIT_TIME_BEFORE_SIU_RETRY = 500;
 
-    public static final String DEFAULT_FINAL_URL_NO_CREATED = "someUrl";
+    public static final String DEFAULT_FINAL_URL_NO_CREATED = "pending-page";
 
     private AccountService accountService;
 

@@ -28,7 +28,6 @@ public class GoldenMasterTest {
         Object[] restricted = BOTH_BOOLEAN_VALS;
         Object[] emailUsed = BOTH_BOOLEAN_VALS;
         LegacyApprovals.LockDown(this, "callACC", email, siret, siretException, restricted, emailUsed);
-        
     }
     
     public String callACC(String email, String siret, Boolean siretException, Boolean restricted, Boolean emailUsed) throws IOException, WrefTechnicalException {
